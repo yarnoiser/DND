@@ -1,4 +1,4 @@
-(use miscmacros (srfi 1 95) coops)
+(use miscmacros (srfi 1 95) coops coops-primitive-objects)
 
 (define *stat-symbols* '(str dex con int wis cha))
 
@@ -49,8 +49,25 @@
                 'cha (roll-stat)))
 
 ;; stat values prioritized according to order of order list
-;(define (priority-stats . order)
-;  (let ([nums (sort (stats-list) <)]
-;        [unassigned (lset-difference *stat-symbols* order)])
-;    (
-    
+(define (priority-stats . order)
+  (let ([nums (sort (stats-list) >)]
+        [unassigned (lset-difference eqv? *stat-symbols* order)]
+        [stats (make <stats>)])
+    (for-each (lambda (stat)
+                (set! (slot-value stats stat) (pop! nums)))
+              order)
+    (for-each (lambda (stat)
+                (set! (slot-value stats stat) (pop! nums)))
+              unassigned)
+    stats))
+
+;;; methods for stats class
+
+;; swap values of two stats
+(define-generic (stats-swap! stats stat1 stat2))
+
+(define-method (stats-swap! (stats <stats>) (stat1 <symbol>) (stat2 <symbol>))
+  (let ([tmp (slot-value stats stat1)])
+    (set! (slot-value stats stat1) (slot-value stats stat2))
+    (set! (slot-value stats stat2) tmp)))
+
