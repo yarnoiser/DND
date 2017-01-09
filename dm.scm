@@ -1,5 +1,5 @@
 (load "dice.scm")
 (load "stats.scm")
 (load "tracker.scm")
-(use describe)
+(use coops describe describe-coops)
 

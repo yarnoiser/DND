@@ -1,4 +1,4 @@
-(use (srfi 27))
+(use srfi-27)
 
 (define (d n) (+ 1 (random-integer n)))
 
