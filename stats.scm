@@ -71,3 +71,9 @@
     (set! (slot-value stats stat1) (slot-value stats stat2))
     (set! (slot-value stats stat2) tmp)))
 
+(define-generic (inc-ability-score! stats stat))
+
+(define-method (inc-ability-score! (stats <stats>) (stat <symbol>))
+  (set! (slot-value stats stat) (add1 (slot-value stats stat))))
+
+
